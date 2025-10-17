@@ -269,9 +269,10 @@ export class CalculationService {
         const validItemCount = items.filter(item => typeof item.linePrice === 'number' && item.linePrice > 0).length;
         const singleprofit = validItemCount > 0 ? rbProfit / validItemCount : 0;
         
-        const sumProfit = sumPrice - f1_final_total;
+        // [MODIFIED] Corrected sumProfit and netProfit calculation
+        const sumProfit = sumPrice - f1SubTotal;
         const gst = sumPrice * 1.1; // Correctly calculate the total including GST
-        const netProfit = sumProfit - (gst - sumPrice); // Net Profit = Gross Profit - Tax Amount
+        const netProfit = gst - f1_final_total;
 
         return {
             totalSumForRbTime: totalSumFromQuickQuote,
