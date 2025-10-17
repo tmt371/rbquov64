@@ -1,0 +1,137 @@
+/* /04-core-code/ui/css/f1-grid.css */
+
+.f1-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr 1fr; /* Item | Qty | $ */
+    gap: 8px 10px;
+    align-items: center;
+}
+
+.f1-grid-cell {
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: center;
+    min-height: 28px; /* Set a minimum height for all cells */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- Headers --- */
+.f1-main-header {
+    grid-column: 1 / -1;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--panel-border-color);
+    padding-bottom: 4px;
+    margin-bottom: 5px;
+    justify-content: flex-start;
+}
+
+.f1-col-header {
+    font-weight: bold;
+    color: #1f2937;
+    background-color: #e5e7eb;
+    border-radius: 3px;
+}
+
+/* --- Item Labels --- */
+.f1-item-label,
+.f1-group-label,
+.f1-sub-item-label,
+.f1-total-label {
+    text-align: left;
+    justify-content: flex-start;
+    padding-left: 5px;
+    font-weight: 500;
+}
+
+.f1-group-label {
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.f1-sub-item-label {
+    padding-left: 20px; /* Indent sub-items */
+}
+
+/* --- Qty Cells --- */
+.f1-input-qty {
+    background-color: #dbeafe; /* Light Blue background for input */
+    border: 1px solid #93c5fd;
+    border-radius: 4px;
+    padding: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    font-family: "Menlo", "Consolas", monospace;
+    min-height: 30px;
+}
+
+.f1-qty-display {
+    background-color: #ffffff; /* White background for display-only Qty */
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: center;
+    font-family: "Menlo", "Consolas", monospace;
+    min-height: 30px;
+}
+
+
+/* --- Price Cells --- */
+.f1-price-display {
+    background-color: #dcfce7; /* Green background */
+    border: 1px solid #86efac;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: flex-end;
+    padding-right: 8px;
+    font-family: "Menlo", "Consolas", monospace;
+    min-height: 30px;
+    font-weight: bold;
+}
+
+/* --- Spacers & Totals --- */
+.f1-spacer {
+    height: 1px;
+    background-color: #9ca3af;
+    margin: 8px 0;
+    min-height: 1px;
+}
+
+.f1-total-label {
+    font-weight: bold;
+}
+
+.f1-section-total {
+    font-weight: bold;
+    background-color: #c7d2fe; /* Indigo light */
+    border-color: #a5b4fc;
+}
+
+.f1-grand-total-label {
+    font-size: 1.1em;
+}
+
+.f1-grand-total {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #be123c; /* Rose-700 */
+    background-color: #fecaca; /* Red-200 */
+    border-color: #f87171;
+}
+
+/* Hide Number Input Spinners */
+.f1-input-qty[type=number]::-webkit-outer-spin-button,
+.f1-input-qty[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.f1-input-qty[type=number] {
+  -moz-appearance: textfield;
+}
