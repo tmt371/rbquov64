@@ -19,6 +19,7 @@ export class RightPanelComponent {
 
         this._cacheF1Elements();
         this._cacheF2Elements();
+        this._cacheF3Elements();
         this._cacheF4Elements();
         this.initialize();
         console.log("RightPanelComponent Initialized for F1 Cost Display.");
@@ -188,6 +189,15 @@ export class RightPanelComponent {
             b25_netprofit: query('#f2-b25-netprofit'),
         };
     }
+
+    _cacheF3Elements() {
+        const query = (id) => this.panelElement.querySelector(id);
+        this.f3 = {
+            quoteId: query('#f3-quote-id'),
+            issueDate: query('#f3-issue-date'),
+            dueDate: query('#f3-due-date'),
+        };
+    }
     
     _cacheF4Elements() {
         const query = (id) => this.panelElement.querySelector(id);
@@ -295,7 +305,6 @@ export class RightPanelComponent {
         this.f1.displays.price['final-total'].textContent = formatPrice(finalTotal);
     }
 
-
     _renderF2Tab(state) {
         if (!state || !state.ui.f2 || !this.f2.b2_winderPrice) return;
         
@@ -363,6 +372,30 @@ export class RightPanelComponent {
         this.f2.c15_removalFee.classList.toggle('is-excluded', f2State.removalFeeExcluded);
     }
 
+    _renderF3Tab() {
+        if (!this.f3.quoteId) return;
+
+        const formatDate = (date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        };
+
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        
+        this.f3.quoteId.value = `RB${year}${month}${day}${hours}`;
+        this.f3.issueDate.value = formatDate(now);
+
+        const dueDate = new Date();
+        dueDate.setDate(now.getDate() + 14);
+        this.f3.dueDate.value = formatDate(dueDate);
+    }
+
     _setActiveTab(clickedButton) {
         const targetContentId = clickedButton.dataset.tabTarget;
 
@@ -376,12 +409,15 @@ export class RightPanelComponent {
 
         if (targetContentId === '#f1-content') {
             this.eventAggregator.publish(EVENTS.F1_TAB_ACTIVATED);
-            // Force a re-render of F1 tab content when it's activated.
             this._renderF1Tab(this.state);
         }
         
         if (targetContentId === '#f2-content') {
             this.eventAggregator.publish(EVENTS.F2_TAB_ACTIVATED);
+        }
+
+        if (targetContentId === '#f3-content') {
+            this._renderF3Tab();
         }
     }
 }
