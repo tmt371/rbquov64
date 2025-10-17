@@ -124,7 +124,6 @@ export const DOM_IDS = {
     F1_PRICE_TOTAL: 'f1-price-total',
     F1_RB_RETAIL: 'f1-rb-retail',
     F1_RB_DISCOUNT_INPUT: 'f1-rb-discount-input',
-    F1_RB_DISCOUNT_AMOUNT: 'f1-rb-discount-amount',
     F1_RB_PRICE: 'f1-rb-price',
     F1_SUB_TOTAL: 'f1-sub-total',
     F1_GST: 'f1-gst',

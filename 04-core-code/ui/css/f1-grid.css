@@ -2,136 +2,113 @@
 
 .f1-grid {
     display: grid;
-    grid-template-columns: 1.2fr 0.8fr 1fr; /* Item | Qty | $ */
-    gap: 8px 10px;
+    /* Columns: A (label), B (quantity/label), C (amount) */
+    grid-template-columns: 1.2fr 0.8fr 1fr;
+    gap: 12px 10px; /* Increased vertical gap */
     align-items: center;
 }
 
-.f1-grid-cell {
-    font-size: 14px;
-    line-height: 1.4;
-    text-align: center;
-    min-height: 28px; /* Set a minimum height for all cells */
+/* --- Universal Cell Style --- */
+.f1-grid .grid-cell {
+    min-height: 28px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Default to left-align */
 }
 
-/* --- Headers --- */
-.f1-main-header {
+/* --- Span Helpers --- */
+.f1-grid .grid-span-2 { grid-column: span 2; }
+.f1-grid .grid-span-3 { grid-column: span 3; }
+.f1-grid .grid-col-start-2 { grid-column-start: 2; }
+
+/* --- Grouping Containers --- */
+.component-cost-group,
+.rb-pricing-group,
+.final-summary-group {
     grid-column: 1 / -1;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--primary-color);
-    border-bottom: 2px solid var(--panel-border-color);
-    padding-bottom: 4px;
-    margin-bottom: 5px;
-    justify-content: flex-start;
+    border-radius: 8px;
+    padding: 15px;
+    display: grid;
+    grid-template-columns: subgrid;
+    gap: 8px 10px;
 }
 
-.f1-col-header {
-    font-weight: bold;
-    color: #1f2937;
-    background-color: #e5e7eb;
-    border-radius: 3px;
+.component-cost-group {
+    border: 2px solid #6B8E23; 
+    background-color: #f9f9f9;
 }
 
-/* --- Item Labels --- */
-.f1-item-label,
-.f1-group-label,
-.f1-sub-item-label,
-.f1-total-label {
-    text-align: left;
-    justify-content: flex-start;
-    padding-left: 5px;
-    font-weight: 500;
+.rb-pricing-group {
+    border: 2px solid #87CEEB; /* SkyBlue */
+    background-color: #f0f8ff; /* AliceBlue */
 }
 
-.f1-group-label {
-    font-weight: bold;
-    margin-top: 5px;
+.final-summary-group {
+    border: 2px solid #DC143C; /* Crimson */
+    background-color: #fffafa; /* Snow */
 }
 
-.f1-sub-item-label {
-    padding-left: 20px; /* Indent sub-items */
-}
-
-/* --- Qty Cells --- */
-.f1-input-qty {
-    background-color: #dbeafe; /* Light Blue background for input */
-    border: 1px solid #93c5fd;
-    border-radius: 4px;
-    padding: 5px;
+/* --- Object Styles (Boxes) --- */
+.f1-grid .qty-box, 
+.f1-grid .price-box, 
+.f1-grid .input-box {
     width: 100%;
+    min-height: 30px;
+    border: 1px solid #000000;
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    font-family: "Menlo", "Consolas", monospace;
+}
+
+#f1-rb-discount-input {
+    border: 1px solid #000000;
+    border-radius: 4px;
     box-sizing: border-box;
     text-align: center;
-    font-family: "Menlo", "Consolas", monospace;
-    min-height: 30px;
 }
 
-.f1-qty-display {
-    background-color: #ffffff; /* White background for display-only Qty */
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    width: 100%;
-    box-sizing: border-box;
-    justify-content: center;
-    font-family: "Menlo", "Consolas", monospace;
-    min-height: 30px;
+.f1-grid .qty-box { justify-content: center; }
+.f1-grid .price-box { justify-content: flex-end; font-weight: bold; }
+.f1-grid .input-box { justify-content: center; font-weight: bold; }
+
+/* --- Color Palettes --- */
+.f1-grid .bg-bright-green { background-color: #dcfce7; border-color: #86efac; }
+.f1-grid .bg-light-purple { background-color: #E6E6FA; border-color: #b19cd9; }
+.f1-grid .bg-pink { background-color: #FFF0F5; border-color: #ffb6c1; }
+
+/* --- Typography & Alignment --- */
+.f1-grid .text-right { justify-content: flex-end; }
+.f1-grid .font-bold { font-weight: bold; }
+
+/* --- Alternating Background + Side Border --- */
+.f1-grid .group-row {
+    grid-column: 1 / -1; /* Make the background span all 3 columns */
+    display: grid;
+    grid-template-columns: subgrid; /* Inherit parent grid columns */
+    background-color: #f8f8f8;
+    margin: -4px -15px; /* Offset parent padding and some gap */
+    padding: 4px 15px;
 }
 
-
-/* --- Price Cells --- */
-.f1-price-display {
-    background-color: #dcfce7; /* Green background */
-    border: 1px solid #86efac;
-    border-radius: 4px;
-    width: 100%;
-    box-sizing: border-box;
-    justify-content: flex-end;
-    padding-right: 8px;
-    font-family: "Menlo", "Consolas", monospace;
-    min-height: 30px;
-    font-weight: bold;
+.f1-grid .group-row-dual {
+    border-left: 3px solid #3b82f6; /* Blue border */
 }
 
-/* --- Spacers & Totals --- */
-.f1-spacer {
-    height: 1px;
-    background-color: #9ca3af;
-    margin: 8px 0;
-    min-height: 1px;
+.f1-grid .group-row-remote {
+    border-left: 3px solid #f97316; /* Orange border */
 }
 
-.f1-total-label {
-    font-weight: bold;
-}
-
-.f1-section-total {
-    font-weight: bold;
-    background-color: #c7d2fe; /* Indigo light */
-    border-color: #a5b4fc;
-}
-
-.f1-grand-total-label {
-    font-size: 1.1em;
-}
-
-.f1-grand-total {
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #be123c; /* Rose-700 */
-    background-color: #fecaca; /* Red-200 */
-    border-color: #f87171;
-}
-
-/* Hide Number Input Spinners */
-.f1-input-qty[type=number]::-webkit-outer-spin-button,
-.f1-input-qty[type=number]::-webkit-inner-spin-button {
+/* --- Hide Number Input Spinners --- */
+.f1-grid input[type=number]::-webkit-outer-spin-button,
+.f1-grid input[type=number]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.f1-input-qty[type=number] {
+.f1-grid input[type=number] {
   -moz-appearance: textfield;
 }

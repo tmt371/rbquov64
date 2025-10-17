@@ -110,7 +110,6 @@ export class RightPanelComponent {
                     'slim': query(`#${DOM_IDS.F1_PRICE_SLIM}`),
                     'total': query(`#${DOM_IDS.F1_PRICE_TOTAL}`),
                     'rb-retail': query(`#${DOM_IDS.F1_RB_RETAIL}`),
-                    'rb-discount-amount': query(`#${DOM_IDS.F1_RB_DISCOUNT_AMOUNT}`),
                     'rb-price': query(`#${DOM_IDS.F1_RB_PRICE}`),
                     'sub-total': query(`#${DOM_IDS.F1_SUB_TOTAL}`),
                     'gst': query(`#${DOM_IDS.F1_GST}`),
@@ -284,7 +283,6 @@ export class RightPanelComponent {
         if (document.activeElement !== this.f1.inputs.discount) {
             this.f1.inputs.discount.value = formatDisplay(discountPercentage) || '';
         }
-        this.f1.displays.price['rb-discount-amount'].textContent = formatPrice(discountAmount);
         this.f1.displays.price['rb-price'].textContent = formatPrice(rbPrice);
 
         // --- Final Summary Calculation ---

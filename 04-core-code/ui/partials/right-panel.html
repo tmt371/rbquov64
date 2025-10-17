@@ -13,87 +13,76 @@
 <div class="tab-content-container">
     <div id="f1-content" class="tab-content active">
         <div class="f1-grid">
-            <div class="f1-grid-cell f1-main-header" style="grid-column: 1 / -1;">Component Cost</div>
+            <div class="component-cost-group">
+                <div class="grid-cell grid-span-2">Component Cost</div>
+                <div class="grid-cell price-box bg-light-purple" id="f1-price-total"></div>
+                
+                <div class="grid-cell font-bold">Item</div>
+                <div class="grid-cell font-bold" style="justify-content: center;">Qty</div>
+                <div class="grid-cell font-bold" style="justify-content: center;">$</div>
 
-            <div class="f1-grid-cell f1-col-header">Item</div>
-            <div class="f1-grid-cell f1-col-header">Qty</div>
-            <div class="f1-grid-cell f1-col-header">$</div>
+                <div class="grid-cell">HD Winder</div>
+                <div class="grid-cell qty-box" id="f1-qty-winder"></div>
+                <div class="grid-cell price-box bg-bright-green" id="f1-price-winder"></div>
+                
+                <div class="group-row group-row-dual">
+                    <div class="grid-cell">Dual Combo</div>
+                    <div class="grid-cell qty-box" id="f1-qty-dual-combo"></div>
+                    <div class="grid-cell price-box bg-bright-green" id="f1-price-dual-combo"></div>
+                </div>
+                <div class="group-row group-row-dual">
+                    <div class="grid-cell">Dual Slim</div>
+                    <div class="grid-cell qty-box" id="f1-qty-slim"></div>
+                    <div class="grid-cell price-box bg-bright-green" id="f1-price-slim"></div>
+                </div>
+                
+                <div class="grid-cell">Motor</div>
+                <div class="grid-cell qty-box" id="f1-qty-motor"></div>
+                <div class="grid-cell price-box bg-bright-green" id="f1-price-motor"></div>
+                
+                <div class="group-row group-row-remote">
+                    <div class="grid-cell">Remote 1 Ch</div>
+                    <div class="grid-cell qty-box" id="f1-qty-remote-1ch"></div>
+                    <div class="grid-cell price-box bg-bright-green" id="f1-price-remote-1ch"></div>
+                </div>
+                <div class="group-row group-row-remote">
+                    <div class="grid-cell">Remote 16 Ch</div>
+                    <div class="grid-cell qty-box" id="f1-qty-remote-16ch"></div>
+                    <div class="grid-cell price-box bg-bright-green" id="f1-price-remote-16ch"></div>
+                </div>
 
-            <div class="f1-grid-cell f1-item-label">Winder</div>
-            <div id="f1-qty-winder" class="f1-grid-cell f1-qty-display"></div>
-            <div id="f1-price-winder" class="f1-grid-cell f1-price-display"></div>
+                <div class="grid-cell">Charger</div>
+                <div class="grid-cell qty-box" id="f1-qty-charger"></div>
+                <div class="grid-cell price-box bg-bright-green" id="f1-price-charger"></div>
+                
+                <div class="grid-cell">3M cord</div>
+                <div class="grid-cell qty-box" id="f1-qty-3m-cord"></div>
+                <div class="grid-cell price-box bg-bright-green" id="f1-price-3m-cord"></div>
+            </div>
 
-            <div class="f1-grid-cell f1-item-label">Motor</div>
-            <div id="f1-qty-motor" class="f1-grid-cell f1-qty-display"></div>
-            <div id="f1-price-motor" class="f1-grid-cell f1-price-display"></div>
+            <div class="rb-pricing-group">
+                <div class="grid-cell">RB Pricing</div>
+                <div class="grid-cell font-bold text-right">Retail</div>
+                <div class="grid-cell price-box bg-bright-green" id="f1-rb-retail"></div>
+                
+                <div class="grid-cell">Discnt %</div>
+                <div class="grid-cell">
+                    <input type="number" class="input-box" id="f1-rb-discount-input" placeholder="%">
+                </div>
+                <div class="grid-cell price-box bg-light-purple" id="f1-rb-price"></div>
+            </div>
 
-            <div class="f1-grid-cell f1-group-label">Remote</div>
-            <div class="f1-grid-cell"></div>
-            <div class="f1-grid-cell"></div>
+            <div class="final-summary-group">
+                <div class="grid-cell">Final Summary</div>
+                <div class="grid-cell font-bold text-right">Sub Total</div>
+                <div class="grid-cell price-box bg-light-purple" id="f1-sub-total"></div>
 
-            <div class="f1-grid-cell f1-sub-item-label">1 Ch</div>
-            <div id="f1-qty-remote-1ch" class="f1-grid-cell f1-qty-display f1-clickable-qty"></div>
-            <div id="f1-price-remote-1ch" class="f1-grid-cell f1-price-display"></div>
+                <div class="grid-cell grid-col-start-2 font-bold text-right">GST</div>
+                <div class="grid-cell price-box bg-bright-green" id="f1-gst"></div>
 
-            <div class="f1-grid-cell f1-sub-item-label">16 Ch</div>
-            <div id="f1-qty-remote-16ch" class="f1-grid-cell f1-qty-display"></div>
-            <div id="f1-price-remote-16ch" class="f1-grid-cell f1-price-display"></div>
-
-            <div class="f1-grid-cell f1-item-label">Charger</div>
-            <div id="f1-qty-charger" class="f1-grid-cell f1-qty-display"></div>
-            <div id="f1-price-charger" class="f1-grid-cell f1-price-display"></div>
-
-            <div class="f1-grid-cell f1-item-label">3M cord</div>
-            <div id="f1-qty-3m-cord" class="f1-grid-cell f1-qty-display"></div>
-            <div id="f1-price-3m-cord" class="f1-grid-cell f1-price-display"></div>
-
-            <div class="f1-grid-cell f1-group-label">Dual</div>
-            <div class="f1-grid-cell"></div>
-            <div class="f1-grid-cell"></div>
-
-            <div class="f1-grid-cell f1-sub-item-label">Combo</div>
-            <div id="f1-qty-dual-combo" class="f1-grid-cell f1-qty-display"></div>
-            <div id="f1-price-dual-combo" class="f1-grid-cell f1-price-display"></div>
-
-            <div class="f1-grid-cell f1-sub-item-label">Slim</div>
-            <div id="f1-qty-slim" class="f1-grid-cell f1-qty-display f1-clickable-qty"></div>
-            <div id="f1-price-slim" class="f1-grid-cell f1-price-display"></div>
-
-            <div class="f1-grid-cell f1-total-label">Total</div>
-            <div class="f1-grid-cell"></div>
-            <div id="f1-price-total" class="f1-grid-cell f1-price-display f1-section-total"></div>
-
-            <div class="f1-grid-cell f1-spacer" style="grid-column: 1 / -1;"></div>
-            
-            <div class="f1-grid-cell f1-main-header" style="grid-column: 1 / -1;">RB Pricing</div>
-            
-            <div class="f1-grid-cell f1-item-label">Retail</div>
-            <div class="f1-grid-cell"></div>
-            <div id="f1-rb-retail" class="f1-grid-cell f1-price-display"></div>
-
-            <div class="f1-grid-cell f1-item-label">Discnt %</div>
-            <input type="number" id="f1-rb-discount-input" class="f1-grid-cell f1-input-qty" min="0" max="40" placeholder="%">
-            <div id="f1-rb-discount-amount" class="f1-grid-cell f1-price-display"></div>
-
-            <div class="f1-grid-cell f1-item-label">Price</div>
-            <div class="f1-grid-cell"></div>
-            <div id="f1-rb-price" class="f1-grid-cell f1-price-display f1-section-total"></div>
-
-            <div class="f1-grid-cell f1-spacer" style="grid-column: 1 / -1;"></div>
-
-            <div class="f1-grid-cell f1-main-header" style="grid-column: 1 / -1;">Final Summary</div>
-
-            <div class="f1-grid-cell f1-item-label">Sub Total</div>
-            <div class="f1-grid-cell"></div>
-            <div id="f1-sub-total" class="f1-grid-cell f1-price-display"></div>
-
-            <div class="f1-grid-cell f1-item-label">GST</div>
-            <div class="f1-grid-cell"></div>
-            <div id="f1-gst" class="f1-grid-cell f1-price-display"></div>
-
-            <div class="f1-grid-cell f1-total-label f1-grand-total-label">Total</div>
-            <div class="f1-grid-cell"></div>
-            <div id="f1-final-total" class="f1-grid-cell f1-price-display f1-grand-total"></div>
+                <div class="grid-cell grid-col-start-2 text-right font-bold">Total</div>
+                <div class="grid-cell price-box bg-pink" id="f1-final-total"></div>
+            </div>
         </div>
     </div>
     <div id="f2-content" class="tab-content">
