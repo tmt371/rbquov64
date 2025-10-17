@@ -3,9 +3,12 @@
 .f1-grid {
     display: grid;
     /* Columns: A (label), B (quantity/label), C (amount) */
-    grid-template-columns: 1.2fr 0.8fr 1fr;
+    /* [MODIFIED] Rightmost column width reduced by 10% */
+    grid-template-columns: 1.2fr 0.8fr 0.9fr;
     gap: 12px 10px; /* Increased vertical gap */
     align-items: center;
+    /* [MODIFIED] Base font size reduced by ~10% */
+    font-size: 13px;
 }
 
 /* --- Universal Cell Style --- */
@@ -27,7 +30,8 @@
 .final-summary-group {
     grid-column: 1 / -1;
     border-radius: 8px;
-    padding: 15px;
+    /* [MODIFIED] Reduced horizontal padding to widen the component */
+    padding: 15px 8px;
     display: grid;
     grid-template-columns: subgrid;
     gap: 8px 10px;
@@ -83,6 +87,13 @@
 /* --- Typography & Alignment --- */
 .f1-grid .text-right { justify-content: flex-end; }
 .f1-grid .font-bold { font-weight: bold; }
+/* [MODIFIED] Prevent wrapping on all labels in the first column */
+.component-cost-group .grid-cell:first-child,
+.rb-pricing-group .grid-cell:first-child,
+.final-summary-group .grid-cell:first-child {
+    white-space: nowrap;
+}
+
 
 /* --- Alternating Background + Side Border --- */
 .f1-grid .group-row {
@@ -90,8 +101,9 @@
     display: grid;
     grid-template-columns: subgrid; /* Inherit parent grid columns */
     background-color: #f8f8f8;
-    margin: -4px -15px; /* Offset parent padding and some gap */
-    padding: 4px 15px;
+    /* [MODIFIED] Adjusted negative margin to match new padding */
+    margin: -4px -8px; 
+    padding: 4px 8px;
 }
 
 .f1-grid .group-row-dual {
