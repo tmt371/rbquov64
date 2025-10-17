@@ -64,6 +64,8 @@
 }
 
 .section-header {
+    /* [MODIFIED] Changed to span 2 columns */
+    grid-column: 1 / span 2;
     font-weight: bold;
     color: #1f2937;
     background-color: #d1d5db;
@@ -72,6 +74,11 @@
     margin-top: 8px;
     justify-content: center;
     font-size: 0.85em;
+}
+
+/* [ADDED] Style for the total value in the header row */
+.section-header-total {
+    margin-top: 8px; /* Aligns with the section-header */
 }
 
 
