@@ -10,13 +10,14 @@ export class F2SummaryView {
         this.panelElement = panelElement;
         this.eventAggregator = eventAggregator;
 
-        this._cacheF2Elements();
-        this._initializeF2Listeners();
-
+        // [MODIFIED] Define the focus order array BEFORE it is used.
         this.focusOrder = [
             'f2-b10-wifi-qty', 'f2-b13-delivery-qty', 'f2-b14-install-qty',
             'f2-b15-removal-qty', 'f2-b17-mul-times', 'f2-b18-discount'
         ];
+
+        this._cacheF2Elements();
+        this._initializeF2Listeners();
 
         console.log("F2SummaryView Initialized.");
     }
