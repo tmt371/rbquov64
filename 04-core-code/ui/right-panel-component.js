@@ -42,6 +42,17 @@ export class RightPanelComponent {
                 }
             });
         }
+
+        // [MODIFIED] Add a dedicated listener for the panel toggle
+        const panelToggle = document.getElementById(DOM_IDS.FUNCTION_PANEL_TOGGLE);
+        if (panelToggle) {
+            panelToggle.addEventListener('click', () => {
+                // If the panel is about to be expanded, default to the F1 tab.
+                if (!this.panelElement.classList.contains('is-expanded')) {
+                    this._setActiveTab('f1-tab');
+                }
+            });
+        }
     }
 
     render(state) {

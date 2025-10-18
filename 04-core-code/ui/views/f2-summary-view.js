@@ -12,6 +12,12 @@ export class F2SummaryView {
 
         this._cacheF2Elements();
         this._initializeF2Listeners();
+
+        this.focusOrder = [
+            'f2-b10-wifi-qty', 'f2-b13-delivery-qty', 'f2-b14-install-qty',
+            'f2-b15-removal-qty', 'f2-b17-mul-times', 'f2-b18-discount'
+        ];
+
         console.log("F2SummaryView Initialized.");
     }
 
@@ -50,26 +56,27 @@ export class F2SummaryView {
     }
 
     _initializeF2Listeners() {
-        const setupF2InputListener = (inputElement) => {
-            if (inputElement) {
-                inputElement.addEventListener('change', (event) => {
+        this.focusOrder.forEach((elementId, index) => {
+            const currentElement = this.panelElement.querySelector(`#${elementId}`);
+            if (currentElement) {
+                currentElement.addEventListener('change', (event) => {
                     this.eventAggregator.publish(EVENTS.F2_VALUE_CHANGED, { id: event.target.id, value: event.target.value });
                 });
-                
-                inputElement.addEventListener('keydown', (event) => {
-                    if (event.key === 'Enter') {
+
+                currentElement.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || (event.key === 'Tab' && !event.shiftKey)) {
                         event.preventDefault();
-                        this.eventAggregator.publish(EVENTS.F2_INPUT_ENTER_PRESSED, { id: event.target.id });
+                        const nextIndex = index + 1;
+                        if (nextIndex < this.focusOrder.length) {
+                            const nextElementId = this.focusOrder[nextIndex];
+                            this.eventAggregator.publish(EVENTS.FOCUS_ELEMENT, { elementId: nextElementId });
+                        } else {
+                            event.target.blur(); // Lose focus
+                        }
                     }
                 });
             }
-        };
-
-        const f2Inputs = [
-            this.f2.b10_wifiQty, this.f2.b13_deliveryQty, this.f2.b14_installQty,
-            this.f2.b15_removalQty, this.f2.b17_mulTimes, this.f2.b18_discount
-        ];
-        f2Inputs.forEach(input => setupF2InputListener(input));
+        });
 
         const feeCells = [
             { el: this.f2.c13_deliveryFee, type: 'delivery' },
@@ -154,5 +161,7 @@ export class F2SummaryView {
 
     activate() {
         this.eventAggregator.publish(EVENTS.F2_TAB_ACTIVATED);
+        // [MODIFIED] Set default focus when the tab becomes active.
+        this.eventAggregator.publish(EVENTS.FOCUS_ELEMENT, { elementId: 'f2-b10-wifi-qty' });
     }
 }

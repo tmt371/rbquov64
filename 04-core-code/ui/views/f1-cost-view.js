@@ -70,6 +70,14 @@ export class F1CostView {
                 const percentage = parseFloat(event.target.value) || 0;
                 this.eventAggregator.publish(EVENTS.F1_DISCOUNT_CHANGED, { percentage });
             });
+
+            // [MODIFIED] Add keydown listener to handle Enter/Tab key press
+            discountInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === 'Tab') {
+                    event.preventDefault();
+                    event.target.blur(); // Lose focus
+                }
+            });
         }
     }
 
@@ -146,5 +154,7 @@ export class F1CostView {
 
     activate() {
         this.eventAggregator.publish(EVENTS.F1_TAB_ACTIVATED);
+        // [MODIFIED] Set default focus when the tab becomes active.
+        this.eventAggregator.publish(EVENTS.FOCUS_ELEMENT, { elementId: DOM_IDS.F1_RB_DISCOUNT_INPUT });
     }
 }
