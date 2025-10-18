@@ -95,7 +95,7 @@ export class AppContext {
         const rightPanelElement = document.getElementById('function-panel');
         const f1View = new F1CostView({ panelElement: rightPanelElement, eventAggregator, calculationService });
         const f2View = new F2SummaryView({ panelElement: rightPanelElement, eventAggregator });
-        const f3View = new F3QuotePrepView({ panelElement: rightPanelElement });
+        const f3View = new F3QuotePrepView({ panelElement: rightPanelElement, eventAggregator });
         const f4View = new F4ActionsView({ panelElement: rightPanelElement, eventAggregator });
 
         // --- Instantiate Main RightPanelComponent Manager ---
@@ -116,7 +116,6 @@ export class AppContext {
         const dualChainView = new DualChainView({ stateService, calculationService, eventAggregator });
         const driveAccessoriesView = new DriveAccessoriesView({ stateService, calculationService, eventAggregator });
 
-        // --- [MODIFIED] Removed obsolete publishStateChangeCallback from DetailConfigView dependencies ---
         const detailConfigView = new DetailConfigView({
             stateService,
             eventAggregator,
@@ -138,6 +137,7 @@ export class AppContext {
         });
         this.register('workflowService', workflowService);
 
+        // --- [MODIFIED] Removed obsolete publishStateChangeCallback from QuickQuoteView dependencies ---
         const quickQuoteView = new QuickQuoteView({
             stateService,
             calculationService,
