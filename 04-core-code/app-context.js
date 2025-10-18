@@ -78,14 +78,24 @@ export class AppContext {
             stateService
         });
         this.register('focusService', focusService);
+        
+        // --- [REFACTOR] Instantiate Right Panel Sub-Views ---
+        const f1View = new F1CostView({ panelElement: document.body, eventAggregator, calculationService });
+        const f2View = new F2SummaryView({ panelElement: document.body, eventAggregator });
+        const f3View = new F3QuotePrepView({ panelElement: document.body });
+        const f4View = new F4ActionsView({ panelElement: document.body, eventAggregator });
 
-        const publishStateChangeCallback = () => eventAggregator.publish('stateChanged', this.get('appController')._getFullState());
+        this.register('f1View', f1View);
+        this.register('f2View', f2View);
+        this.register('f3View', f3View);
+        this.register('f4View', f4View);
 
-        const k1LocationView = new K1LocationView({ stateService, publishStateChangeCallback });
-        const k2FabricView = new K2FabricView({ stateService, eventAggregator, publishStateChangeCallback });
-        const k3OptionsView = new K3OptionsView({ stateService, publishStateChangeCallback });
-        const dualChainView = new DualChainView({ stateService, calculationService, eventAggregator, publishStateChangeCallback });
-        const driveAccessoriesView = new DriveAccessoriesView({ stateService, calculationService, eventAggregator, publishStateChangeCallback });
+        // --- Instantiate Main Views ---
+        const k1LocationView = new K1LocationView({ stateService });
+        const k2FabricView = new K2FabricView({ stateService, eventAggregator });
+        const k3OptionsView = new K3OptionsView({ stateService });
+        const dualChainView = new DualChainView({ stateService, calculationService, eventAggregator });
+        const driveAccessoriesView = new DriveAccessoriesView({ stateService, calculationService, eventAggregator });
 
         this.register('k1LocationView', k1LocationView);
         this.register('k2FabricView', k2FabricView);
@@ -95,9 +105,7 @@ export class AppContext {
 
         const detailConfigView = new DetailConfigView({
             stateService,
-            calculationService,
             eventAggregator,
-            publishStateChangeCallback,
             k1LocationView,
             k2FabricView,
             k3OptionsView,
@@ -123,8 +131,7 @@ export class AppContext {
             fileService,
             eventAggregator,
             productFactory,
-            configManager,
-            publishStateChangeCallback
+            configManager
         });
         this.register('quickQuoteView', quickQuoteView);
 
@@ -157,3 +164,8 @@ import { K3OptionsView } from './ui/views/k3-options-view.js';
 import { DualChainView } from './ui/views/dual-chain-view.js';
 import { DriveAccessoriesView } from './ui/views/drive-accessories-view.js';
 import { initialState } from './config/initial-state.js';
+// [REFACTOR] Import new Right Panel Sub-View classes
+import { F1CostView } from './ui/views/f1-cost-view.js';
+import { F2SummaryView } from './ui/views/f2-summary-view.js';
+import { F3QuotePrepView } from './ui/views/f3-quote-prep-view.js';
+import { F4ActionsView } from './ui/views/f4-actions-view.js';
