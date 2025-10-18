@@ -7,9 +7,7 @@
 export class DetailConfigView {
     constructor({ 
         stateService, 
-        calculationService, 
         eventAggregator, 
-        publishStateChangeCallback,
         // Sub-views are injected here
         k1LocationView,
         k2FabricView,
@@ -18,9 +16,7 @@ export class DetailConfigView {
         dualChainView
     }) {
         this.stateService = stateService;
-        this.calculationService = calculationService;
         this.eventAggregator = eventAggregator;
-        this.publish = publishStateChangeCallback;
 
         // Store instances of sub-views
         this.k1View = k1LocationView;
@@ -41,7 +37,6 @@ export class DetailConfigView {
                 break;
             case 'k2-tab':
                 this.k2View.activate();
-                this.k2View._updatePanelInputsState();
                 break;
             case 'k3-tab':
                 this.k3View.activate();
@@ -55,7 +50,6 @@ export class DetailConfigView {
             default:
                 break;
         }
-        this.publish();
     }
     
     // --- Event Handlers that delegate to sub-views ---
@@ -115,8 +109,6 @@ export class DetailConfigView {
         this.dualChainView.handleChainEnterPressed({ value });
     }
 
-
-
     handleDriveModeChange({ mode }) {
         this.driveAccessoriesView.handleModeChange({ mode });
     }
@@ -148,9 +140,5 @@ export class DetailConfigView {
             this.dualChainView.handleTableCellClick({ rowIndex, column });
             return;
         }
-    }
-    
-    initializePanelState() {
-        this.k2View._updatePanelInputsState();
     }
 }

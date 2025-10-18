@@ -116,6 +116,7 @@ export class AppContext {
         const dualChainView = new DualChainView({ stateService, calculationService, eventAggregator });
         const driveAccessoriesView = new DriveAccessoriesView({ stateService, calculationService, eventAggregator });
 
+        // --- [MODIFIED] Removed obsolete publishStateChangeCallback from DetailConfigView dependencies ---
         const detailConfigView = new DetailConfigView({
             stateService,
             eventAggregator,
