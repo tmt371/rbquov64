@@ -1,6 +1,6 @@
 // File: 04-core-code/ui/right-panel-component.js
 
-import { DOM_IDS } from '../config/constants.js';
+import { DOM_IDS, EVENTS } from '../config/constants.js';
 
 /**
  * @fileoverview A container/manager component for the Right Panel.
@@ -43,22 +43,28 @@ export class RightPanelComponent {
             });
         }
 
-        // [MODIFIED] Add a dedicated listener for the panel toggle
         const panelToggle = document.getElementById(DOM_IDS.FUNCTION_PANEL_TOGGLE);
         if (panelToggle) {
             panelToggle.addEventListener('click', () => {
-                // If the panel is about to be expanded, default to the F1 tab.
                 if (!this.panelElement.classList.contains('is-expanded')) {
                     this._setActiveTab('f1-tab');
                 }
             });
         }
+
+        // [MODIFIED] Re-subscribe to the FOCUS_ELEMENT event to restore focus management.
+        this.eventAggregator.subscribe(EVENTS.FOCUS_ELEMENT, ({ elementId }) => {
+            const element = this.panelElement.querySelector(`#${elementId}`);
+            if (element) {
+                element.focus();
+                element.select();
+            }
+        });
     }
 
     render(state) {
         this.state = state; // Cache the latest state
         
-        // Only render the currently active sub-view for performance.
         if (this.activeView && typeof this.activeView.render === 'function') {
             this.activeView.render(state);
         }
@@ -78,8 +84,6 @@ export class RightPanelComponent {
 
         this.activeView = this.views[tabId];
 
-        // Call the activate method on the new active view, if it exists.
-        // This is useful for one-time actions when a tab is selected.
         if (this.activeView && typeof this.activeView.activate === 'function') {
             this.activeView.activate();
         }
