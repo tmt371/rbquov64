@@ -41,7 +41,7 @@ export class AppContext {
     }
 
     initialize(startingQuoteData = null) {
-        // 在這裡，我們將從 main.js 遷移過來的實例化邏輯
+        // [MODIFIED] This method now only initializes non-UI services and controllers.
         const eventAggregator = new EventAggregator();
         this.register('eventAggregator', eventAggregator);
 
@@ -78,6 +78,18 @@ export class AppContext {
             stateService
         });
         this.register('focusService', focusService);
+    }
+
+    initializeUIComponents() {
+        // [NEW] This method initializes all UI-dependent components.
+        // It must be called AFTER the HTML partials are loaded.
+        const eventAggregator = this.get('eventAggregator');
+        const calculationService = this.get('calculationService');
+        const stateService = this.get('stateService');
+        const configManager = this.get('configManager');
+        const productFactory = this.get('productFactory');
+        const focusService = this.get('focusService');
+        const fileService = this.get('fileService');
         
         // --- Instantiate Right Panel Sub-Views ---
         const rightPanelElement = document.getElementById('function-panel');
@@ -103,12 +115,6 @@ export class AppContext {
         const k3OptionsView = new K3OptionsView({ stateService });
         const dualChainView = new DualChainView({ stateService, calculationService, eventAggregator });
         const driveAccessoriesView = new DriveAccessoriesView({ stateService, calculationService, eventAggregator });
-
-        this.register('k1LocationView', k1LocationView);
-        this.register('k2FabricView', k2FabricView);
-        this.register('k3OptionsView', k3OptionsView);
-        this.register('dualChainView', dualChainView);
-        this.register('driveAccessoriesView', driveAccessoriesView);
 
         const detailConfigView = new DetailConfigView({
             stateService,
@@ -172,7 +178,6 @@ import { K3OptionsView } from './ui/views/k3-options-view.js';
 import { DualChainView } from './ui/views/dual-chain-view.js';
 import { DriveAccessoriesView } from './ui/views/drive-accessories-view.js';
 import { initialState } from './config/initial-state.js';
-// [REFACTOR] Import new Right Panel Sub-View classes
 import { F1CostView } from './ui/views/f1-cost-view.js';
 import { F2SummaryView } from './ui/views/f2-summary-view.js';
 import { F3QuotePrepView } from './ui/views/f3-quote-prep-view.js';
