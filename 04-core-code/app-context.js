@@ -79,18 +79,25 @@ export class AppContext {
         });
         this.register('focusService', focusService);
         
-        // --- [REFACTOR] Instantiate Right Panel Sub-Views ---
-        const f1View = new F1CostView({ panelElement: document.body, eventAggregator, calculationService });
-        const f2View = new F2SummaryView({ panelElement: document.body, eventAggregator });
-        const f3View = new F3QuotePrepView({ panelElement: document.body });
-        const f4View = new F4ActionsView({ panelElement: document.body, eventAggregator });
+        // --- Instantiate Right Panel Sub-Views ---
+        const rightPanelElement = document.getElementById('function-panel');
+        const f1View = new F1CostView({ panelElement: rightPanelElement, eventAggregator, calculationService });
+        const f2View = new F2SummaryView({ panelElement: rightPanelElement, eventAggregator });
+        const f3View = new F3QuotePrepView({ panelElement: rightPanelElement });
+        const f4View = new F4ActionsView({ panelElement: rightPanelElement, eventAggregator });
 
-        this.register('f1View', f1View);
-        this.register('f2View', f2View);
-        this.register('f3View', f3View);
-        this.register('f4View', f4View);
+        // --- Instantiate Main RightPanelComponent Manager ---
+        const rightPanelComponent = new RightPanelComponent({
+            panelElement: rightPanelElement,
+            eventAggregator,
+            f1View,
+            f2View,
+            f3View,
+            f4View
+        });
+        this.register('rightPanelComponent', rightPanelComponent);
 
-        // --- Instantiate Main Views ---
+        // --- Instantiate Main Left Panel Views ---
         const k1LocationView = new K1LocationView({ stateService });
         const k2FabricView = new K2FabricView({ stateService, eventAggregator });
         const k3OptionsView = new K3OptionsView({ stateService });
@@ -156,6 +163,7 @@ import { CalculationService } from './services/calculation-service.js';
 import { FocusService } from './services/focus-service.js';
 import { FileService } from './services/file-service.js';
 import { WorkflowService } from './services/workflow-service.js';
+import { RightPanelComponent } from './ui/right-panel-component.js';
 import { QuickQuoteView } from './ui/views/quick-quote-view.js';
 import { DetailConfigView } from './ui/views/detail-config-view.js';
 import { K1LocationView } from './ui/views/k1-location-view.js';

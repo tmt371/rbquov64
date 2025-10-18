@@ -55,12 +55,14 @@ class App {
         const calculationService = this.appContext.get('calculationService');
         const configManager = this.appContext.get('configManager');
         const appController = this.appContext.get('appController');
+        const rightPanelComponent = this.appContext.get('rightPanelComponent'); // [MODIFIED] Get instance from context
 
-        this.uiManager = new UIManager(
-            document.getElementById(DOM_IDS.APP),
+        this.uiManager = new UIManager({
+            appElement: document.getElementById(DOM_IDS.APP),
             eventAggregator,
-            calculationService
-        );
+            calculationService,
+            rightPanelComponent // [MODIFIED] Pass instance to UIManager
+        });
 
         await configManager.initialize();
 

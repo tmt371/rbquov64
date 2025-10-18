@@ -6,18 +6,18 @@ import { PanelComponent } from './panel-component.js';
 import { NotificationComponent } from './notification-component.js';
 import { DialogComponent } from './dialog-component.js';
 import { LeftPanelComponent } from './left-panel-component.js';
-import { RightPanelComponent } from './right-panel-component.js';
 import { EVENTS, DOM_IDS } from '../config/constants.js';
 
 export class UIManager {
-    constructor(appElement, eventAggregator, calculationService) {
+    constructor({ appElement, eventAggregator, calculationService, rightPanelComponent }) {
         this.appElement = appElement;
         this.eventAggregator = eventAggregator;
         this.calculationService = calculationService;
+        this.rightPanelComponent = rightPanelComponent; // [MODIFIED] Receive instance
 
         this.numericKeyboardPanel = document.getElementById(DOM_IDS.NUMERIC_KEYBOARD_PANEL);
         
-        this.insertButton = document.getElementById('key-ins-grid'); // Corrected ID from 'key-ins'
+        this.insertButton = document.getElementById('key-ins-grid');
         this.clearButton = document.getElementById('key-clear');
         
         this.leftPanelElement = document.getElementById(DOM_IDS.LEFT_PANEL);
@@ -38,11 +38,7 @@ export class UIManager {
             retractEventName: EVENTS.OPERATION_SUCCESSFUL_AUTO_HIDE_PANEL
         });
         
-        this.rightPanelComponent = new RightPanelComponent(
-            document.getElementById(DOM_IDS.FUNCTION_PANEL),
-            this.eventAggregator,
-            this.calculationService
-        );
+        // [REMOVED] Self-instantiation of RightPanelComponent is removed.
 
         this.notificationComponent = new NotificationComponent({
             containerElement: document.getElementById(DOM_IDS.TOAST_CONTAINER),
