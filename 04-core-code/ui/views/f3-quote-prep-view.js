@@ -1,11 +1,14 @@
 // File: 04-core-code/ui/views/f3-quote-prep-view.js
 
+import { EVENTS } from '../../config/constants.js';
+
 /**
  * @fileoverview A dedicated sub-view for handling all logic related to the F3 (Quote Prep) tab.
  */
 export class F3QuotePrepView {
-    constructor({ panelElement }) {
+    constructor({ panelElement, eventAggregator }) {
         this.panelElement = panelElement;
+        this.eventAggregator = eventAggregator; // [MODIFIED] Added eventAggregator dependency
 
         this._cacheF3Elements();
         this._initializeF3Listeners();
@@ -35,6 +38,13 @@ export class F3QuotePrepView {
 
     _initializeF3Listeners() {
         if (!this.f3.inputs.issueDate) return;
+
+        // --- "Add Quote" Button Listener ---
+        if (this.f3.buttons.addQuote) {
+            this.f3.buttons.addQuote.addEventListener('click', () => {
+                this.eventAggregator.publish(EVENTS.USER_REQUESTED_PRINTABLE_QUOTE);
+            });
+        }
 
         // --- Date Chaining Logic ---
         this.f3.inputs.issueDate.addEventListener('input', (event) => {

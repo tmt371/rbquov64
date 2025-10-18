@@ -62,7 +62,7 @@ export const EVENTS = {
     TRIGGER_FILE_LOAD: 'triggerFileLoad',
     FILE_LOADED: 'fileLoaded',
 
-    // --- User Actions: F1/F2 Panels ---
+    // --- User Actions: F1/F2/F3 Panels ---
     F1_TAB_ACTIVATED: 'f1TabActivated',
     F1_DISCOUNT_CHANGED: 'f1DiscountChanged',
     USER_REQUESTED_REMOTE_DISTRIBUTION: 'userRequestedRemoteDistribution',
@@ -71,11 +71,7 @@ export const EVENTS = {
     F2_VALUE_CHANGED: 'f2ValueChanged',
     F2_INPUT_ENTER_PRESSED: 'f2InputEnterPressed',
     TOGGLE_FEE_EXCLUSION: 'toggleFeeExclusion',
-
-    // --- Cell/Row Interactions ---
-    TABLE_CELL_CLICKED: 'tableCellClicked',
-    SEQUENCE_CELL_CLICKED: 'sequenceCellClicked',
-    FOCUS_CELL: 'focusCell',
+    USER_REQUESTED_PRINTABLE_QUOTE: 'userRequestedPrintableQuote',
 };
 
 export const DOM_IDS = {
@@ -88,6 +84,7 @@ export const DOM_IDS = {
     TOAST_CONTAINER: 'toast-container',
     CONFIRMATION_DIALOG_OVERLAY: 'confirmation-dialog-overlay',
     FILE_LOADER: 'file-loader',
+    QUOTE_PREVIEW_OVERLAY: 'quote-preview-overlay',
 
     // --- Numeric Keyboard & Top Controls ---
     NUMERIC_KEYBOARD: 'numeric-keyboard',

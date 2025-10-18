@@ -23,6 +23,7 @@ export class AppController {
         this._subscribeGlobalEvents();
         this._subscribeF1Events();
         this._subscribeF2Events();
+        this._subscribeF3Events(); // [ADDED]
         
         // This is the core of the reactive state update.
         // Any service that updates the state via StateService will trigger this,
@@ -118,6 +119,11 @@ export class AppController {
         this.eventAggregator.subscribe(EVENTS.TOGGLE_FEE_EXCLUSION, (data) => this.workflowService.handleToggleFeeExclusion(data));
     }
     
+    // [ADDED] New subscription group for F3 events.
+    _subscribeF3Events() {
+        this.eventAggregator.subscribe(EVENTS.USER_REQUESTED_PRINTABLE_QUOTE, () => this.workflowService.handlePrintableQuoteRequest());
+    }
+
     // This is a special method used by AppContext to publish state, it needs access to stateService.
     _getFullState() {
         return this.stateService.getState();

@@ -2,6 +2,7 @@
 
 import { initialState } from '../config/initial-state.js';
 import { EVENTS, DOM_IDS } from '../config/constants.js';
+import { paths } from '../config/paths.js';
 import * as uiActions from '../actions/ui-actions.js';
 import * as quoteActions from '../actions/quote-actions.js';
 
@@ -24,6 +25,181 @@ export class WorkflowService {
         ];
         
         console.log("WorkflowService Initialized.");
+    }
+
+    async handlePrintableQuoteRequest() {
+        const state = this.stateService.getState();
+        const f3Inputs = this._getF3InputValues();
+        const finalQuoteData = this._mergeF3Overrides(state, f3Inputs);
+
+        try {
+            const [quoteTemplate, detailTemplate] = await Promise.all([
+                fetch(paths.partials.quoteTemplate).then(res => res.text()),
+                fetch(paths.partials.detailedItemList).then(res => res.text())
+            ]);
+
+            let populatedQuote = this._populateQuoteTemplate(quoteTemplate, finalQuoteData, f3Inputs);
+            let populatedDetail = this._populateDetailTemplate(detailTemplate, finalQuoteData);
+
+            const finalHtml = `
+                <div class="preview-content-area">
+                    <div class="preview-actions">
+                        <button id="preview-btn-print" class="btn-print">Print / Save as PDF</button>
+                        <button id="preview-btn-json" class="btn-download">Download JSON</button>
+                        <button id="preview-btn-csv" class="btn-download">Download CSV</button>
+                        <button id="preview-btn-save" class="btn-save-cloud" disabled>Save to Cloud</button>
+                        <button id="preview-btn-close" class="btn-close">Close</button>
+                    </div>
+                    <div class="preview-scroll-container">
+                        ${populatedQuote}
+                        <div class="page-break-before"></div>
+                        ${populatedDetail}
+                    </div>
+                </div>`;
+            
+            const overlay = document.getElementById(DOM_IDS.QUOTE_PREVIEW_OVERLAY);
+            overlay.innerHTML = finalHtml;
+            overlay.classList.remove('is-hidden');
+
+            this._bindPreviewActions(finalQuoteData);
+
+        } catch (error) {
+            console.error('Failed to generate printable quote:', error);
+            this.eventAggregator.publish(EVENTS.SHOW_NOTIFICATION, { message: 'Error generating quote preview.', type: 'error' });
+        }
+    }
+
+    _getF3InputValues() {
+        const queryValue = (id) => document.getElementById(id)?.value || '';
+        return {
+            quoteId: queryValue('f3-quote-id'),
+            issueDate: queryValue('f3-issue-date'),
+            dueDate: queryValue('f3-due-date'),
+            customerName: queryValue('f3-customer-name'),
+            customerAddress: queryValue('f3-customer-address'),
+            customerPhone: queryValue('f3-customer-phone'),
+            customerEmail: queryValue('f3-customer-email'),
+            finalOfferPrice: queryValue('f3-final-offer-price'),
+            generalNotes: queryValue('f3-general-notes'),
+            termsConditions: queryValue('f3-terms-conditions'),
+        };
+    }
+
+    _mergeF3Overrides(state, f3Inputs) {
+        let finalState = JSON.parse(JSON.stringify(state));
+
+        // Override customer info
+        finalState.quoteData.customer.name = f3Inputs.customerName || finalState.quoteData.customer.name;
+        finalState.quoteData.customer.address = f3Inputs.customerAddress || finalState.quoteData.customer.address;
+        finalState.quoteData.customer.phone = f3Inputs.customerPhone || finalState.quoteData.customer.phone;
+        finalState.quoteData.customer.email = f3Inputs.customerEmail || finalState.quoteData.customer.email;
+
+        // Override quote details
+        finalState.quoteData.quoteId = f3Inputs.quoteId || finalState.quoteData.quoteId;
+        finalState.quoteData.issueDate = f3Inputs.issueDate || finalState.quoteData.issueDate;
+        finalState.quoteData.dueDate = f3Inputs.dueDate || finalState.quoteData.dueDate;
+
+        // Override final price if provided
+        if (f3Inputs.finalOfferPrice && !isNaN(parseFloat(f3Inputs.finalOfferPrice))) {
+            const finalPrice = parseFloat(f3Inputs.finalOfferPrice);
+            const gst = finalPrice / 11;
+            const subTotal = finalPrice - gst;
+            finalState.ui.f2.gst = finalPrice; // GST incl.
+            finalState.ui.f2.netProfit = finalPrice - (state.ui.f1.finalTotal || 0);
+            
+            // For template placeholders
+            finalState.templateOverrides = {
+                final_total: `$${finalPrice.toFixed(2)}`,
+                gst_amount: `$${gst.toFixed(2)}`,
+                sub_total: `$${subTotal.toFixed(2)}`
+            };
+        }
+
+        return finalState;
+    }
+
+    _populateQuoteTemplate(template, state, f3Inputs) {
+        const f2 = state.ui.f2;
+        const overrides = state.templateOverrides || {};
+        
+        const formatPrice = (value) => (typeof value === 'number') ? `$${value.toFixed(2)}` : '$0.00';
+
+        let productSummaryRows = `
+            <tr>
+                <td>Roller Blinds</td>
+                <td class="price">${formatPrice(f2.disRbPrice)}</td>
+            </tr>
+            <tr>
+                <td>Installation Accessories</td>
+                <td class="price">${formatPrice(f2.acceSum + f2.eAcceSum + f2.surchargeFee)}</td>
+            </tr>
+        `;
+
+        return template
+            .replace('{{quote_id}}', state.quoteData.quoteId)
+            .replace('{{issue_date}}', state.quoteData.issueDate)
+            .replace('{{due_date}}', state.quoteData.dueDate)
+            .replace('{{customer_name}}', state.quoteData.customer.name)
+            .replace('{{customer_address}}', state.quoteData.customer.address)
+            .replace('{{customer_phone}}', state.quoteData.customer.phone)
+            .replace('{{customer_email}}', state.quoteData.customer.email)
+            .replace('{{product_summary_rows}}', productSummaryRows)
+            .replace('{{sub_total}}', overrides.sub_total || formatPrice(f2.sumPrice))
+            .replace('{{gst_amount}}', overrides.gst_amount || formatPrice(f2.gst - f2.sumPrice))
+            .replace('{{final_total}}', overrides.final_total || formatPrice(f2.gst))
+            .replace('{{notes}}', f3Inputs.generalNotes)
+            .replace('{{terms_and_conditions}}', f3Inputs.termsConditions);
+    }
+
+    _populateDetailTemplate(template, state) {
+        const items = state.quoteData.products[state.quoteData.currentProduct].items;
+        let itemRows = items.map((item, index) => {
+            if (!item.width && !item.height) return ''; // Skip empty final row
+            return `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td class="text-left">${item.location || ''}</td>
+                    <td>${item.width || ''}</td>
+                    <td>${item.height || ''}</td>
+                    <td>${item.fabricType || ''}</td>
+                    <td class="text-left">${item.fabric || ''}</td>
+                    <td class="text-left">${item.color || ''}</td>
+                    <td>${item.over || ''}</td>
+                    <td>${item.oi || ''}</td>
+                    <td>${item.lr || ''}</td>
+                    <td>${item.dual || ''}</td>
+                    <td>${item.chain || ''}</td>
+                    <td>${item.winder || ''}</td>
+                    <td>${item.motor || ''}</td>
+                    <td class="price">${item.linePrice ? `$${item.linePrice.toFixed(2)}` : ''}</td>
+                </tr>
+            `;
+        }).join('');
+
+        return template.replace('{{item_rows}}', itemRows);
+    }
+    
+    _bindPreviewActions(finalState) {
+        const overlay = document.getElementById(DOM_IDS.QUOTE_PREVIEW_OVERLAY);
+        if (!overlay) return;
+
+        const close = () => overlay.classList.add('is-hidden');
+
+        overlay.querySelector('#preview-btn-close').addEventListener('click', close);
+        overlay.querySelector('#preview-btn-print').addEventListener('click', () => window.print());
+        
+        overlay.querySelector('#preview-btn-json').addEventListener('click', () => {
+            this.fileService.saveToJson(finalState.quoteData);
+        });
+
+        overlay.querySelector('#preview-btn-csv').addEventListener('click', () => {
+            this.fileService.exportToCsv(finalState.quoteData);
+        });
+        
+        // Listener for future cloud save functionality
+        overlay.querySelector('#preview-btn-save').addEventListener('click', () => {
+             this.eventAggregator.publish(EVENTS.SHOW_NOTIFICATION, { message: 'Cloud save functionality is not yet implemented.' });
+        });
     }
 
     handleRemoteDistribution() {
