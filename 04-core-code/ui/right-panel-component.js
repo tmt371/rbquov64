@@ -421,4 +421,65 @@ export class RightPanelComponent {
         this.f2.b25_netprofit.textContent = formatDecimalCurrency(f2State.netProfit);
 
         if (document.activeElement !== this.f2.b10_wifiQty) this.f2.b10_wifiQty.value = formatValue(f2State.wifiQty);
-        if (doc
+        if (document.activeElement !== this.f2.b13_deliveryQty) this.f2.b13_deliveryQty.value = formatValue(f2State.deliveryQty);
+        if (document.activeElement !== this.f2.b14_installQty) this.f2.b14_installQty.value = formatValue(f2State.installQty);
+        if (document.activeElement !== this.f2.b15_removalQty) this.f2.b15_removalQty.value = formatValue(f2State.removalQty);
+        if (document.activeElement !== this.f2.b17_mulTimes) this.f2.b17_mulTimes.value = formatValue(f2State.mulTimes);
+        if (document.activeElement !== this.f2.b18_discount) this.f2.b18_discount.value = formatValue(f2State.discount);
+
+        this.f2.c13_deliveryFee.classList.toggle('is-excluded', f2State.deliveryFeeExcluded);
+        this.f2.c14_installFee.classList.toggle('is-excluded', f2State.installFeeExcluded);
+        this.f2.c15_removalFee.classList.toggle('is-excluded', f2State.removalFeeExcluded);
+    }
+
+    _renderF3Tab() {
+        if (!this.f3.inputs.quoteId) return;
+
+        // Only fill if the fields are empty, to preserve manual changes.
+        const formatDate = (date) => {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        };
+
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        
+        if (!this.f3.inputs.quoteId.value) this.f3.inputs.quoteId.value = `RB${year}${month}${day}${hours}`;
+        if (!this.f3.inputs.issueDate.value) this.f3.inputs.issueDate.value = formatDate(now);
+        if (!this.f3.inputs.dueDate.value) {
+            const dueDate = new Date();
+            dueDate.setDate(now.getDate() + 14);
+            this.f3.inputs.dueDate.value = formatDate(dueDate);
+        }
+    }
+
+    _setActiveTab(clickedButton) {
+        const targetContentId = clickedButton.dataset.tabTarget;
+
+        this.tabButtons.forEach(button => {
+            button.classList.toggle('active', button === clickedButton);
+        });
+
+        this.tabContents.forEach(content => {
+            content.classList.toggle('active', `#${content.id}` === targetContentId);
+        });
+
+        if (targetContentId === '#f1-content') {
+            this.eventAggregator.publish(EVENTS.F1_TAB_ACTIVATED);
+            this._renderF1Tab(this.state);
+        }
+        
+        if (targetContentId === '#f2-content') {
+            this.eventAggregator.publish(EVENTS.F2_TAB_ACTIVATED);
+        }
+
+        if (targetContentId === '#f3-content') {
+            this._renderF3Tab();
+        }
+    }
+}
