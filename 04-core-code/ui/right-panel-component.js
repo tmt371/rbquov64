@@ -246,6 +246,7 @@ export class RightPanelComponent {
                 currentElement.addEventListener('keydown', (event) => {
                     if (event.key === 'Enter' || (event.key === 'Tab' && !event.shiftKey)) {
                         event.preventDefault();
+                        event.stopPropagation(); // [FIX] Stop the event from bubbling up
                         const nextIndex = index + 1;
                         if (nextIndex < focusOrder.length) {
                             const nextKey = focusOrder[nextIndex];
